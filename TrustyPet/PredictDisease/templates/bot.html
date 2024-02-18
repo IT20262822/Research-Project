@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>AI Vetaranian</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Lato'>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bot.css') }}">
+   <link rel="preconnect" href="https://fonts.gstatic.com" />
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+</head>
+<body>
+<div style="text-align:center;"><h1 class="text-center text-white fw-bold mt-2" style="font-family: 'Audiowide', cursive"
+    >
+      AI Vet
+    </h1></div>
+
+
+<!-- partial:index.partial.html -->
+<div class="--dark-theme" id="chat">
+  <div id="chat-container" class="chat__conversation-board">
+    
+       
+   
+  </div>
+  <div class="chat__conversation-panel">
+    <div class="chat__conversation-panel__container">
+      
+      <input id="user-input" class="chat__conversation-panel__input panel-item" placeholder="Type a message..."/>
+      <button class="chat__conversation-panel__button panel-item btn-icon send-message-button" onclick="sendMessage()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-reactid="1036">
+          <line x1="22" y1="2" x2="11" y2="13"></line>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+<!-- partial -->
+  <script >
+          // Responses for the chatbot
+          const responses = {
+            "hi": "Hello. How can I assist you today?",
+            "hello": "Hello. How can I assist you today?",
+            "hi ": "Hello. How can I assist you today?",
+            "hello ": "Hello. How can I assist you today?",
+            "my cat is sick": "Oh sorry to hear that! What are the symptoms?",
+            "my cat sick": "Oh sorry to hear that! What are the symptoms?", 
+            "cat sick": "Oh sorry to hear that! What are the symptoms?",          
+            "thank you":"Thank you for using AI Vet. Hope your cat gets better soon.",
+            "no":"Thank you for using AI Vet. Hope your cat gets better soon.",
+            "nope":"Thank you for using AI Vet. Hope your cat gets better soon.",
+            "yes":"If you need another consultation please reload the AI Vet. If not find our other services in the Dashboard or the Services tab in Home page. Thank You",
+            "yeah":"If you need another consultation please reload the AI Vet. If not find our other services in the Dashboard or the Services tab in Home page. Thank You"
+
+        };
+  
+        //Initialize symptoms Variable
+        var symptoms ="no";
+  
+        // Get references to HTML elements
+        const chatboard = document.getElementById("chat-container");
+        const userInput = document.getElementById("user-input");
+  
+        // send a user message and get a response
+        async function sendMessage() {
+        
+            const userMessage = userInput.value;
+            if (userMessage.trim() === "") return; // Ignore empty messages
+  
+            // Add user message to the chat container
+            chatboard.innerHTML += `<div class="chat__conversation-board__message-container reversed">
+        <div class="chat__conversation-board__message__person">
+          <div class="chat__conversation-board__message__person__avatar"><img src="{{ url_for('static', filename='css/human.png') }}" /></div><span class="chat__conversation-board__message__person__nickname">Monika Figi</span>
+        </div>
+        <div class="chat__conversation-board__message__context">
+          <div class="chat__conversation-board__message__bubble"> <span>${userMessage}</span></div>
+        </div>
+        <div class="chat__conversation-board__message__options">
+          <button class="btn-icon chat__conversation-board__message__option-button option-item emoji-button">
+            <svg class="feather feather-smile sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+              <line x1="9" y1="9" x2="9.01" y2="9"></line>
+              <line x1="15" y1="9" x2="15.01" y2="9"></line>
+            </svg>
+          </button>
+          <button class="btn-icon chat__conversation-board__message__option-button option-item more-button">
+            <svg class="feather feather-more-horizontal sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="1"></circle>
+              <circle cx="19" cy="12" r="1"></circle>
+              <circle cx="5" cy="12" r="1"></circle>
+            </svg>
+          </button>
+        </div>
+      </div>`;
+            var chatresponse = ""
+            var followupResponse = ""
+  
+            // Check if the user message matches any known response
+            if(symptoms=="no")
+            {
+              chatresponse = responses[userMessage.toLowerCase()] || "I don't understand that.";
+              chatboard.innerHTML += `<div class="chat__conversation-board__message-container">
+                <div class="chat__conversation-board__message__person">
+                  <div class="chat__conversation-board__message__person__avatar"><img src="{{ url_for('static', filename='css/bot.png') }}" /></div><span class="chat__conversation-board__message__person__nickname">Monika Figi</span>
+                </div>
+                <div class="chat__conversation-board__message__context">
+                  <div class="chat__conversation-board__message__bubble"> <span>${chatresponse}</span></div>
+                </div>
+                <div class="chat__conversation-board__message__options">
+                  <button class="btn-icon chat__conversation-board__message__option-button option-item emoji-button">
+                    <svg class="feather feather-smile sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+                      <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                      <line x1="15" y1="9" x2="15.01" y2="9"></line>
+                    </svg>
+                  </button>
+                  <button class="btn-icon chat__conversation-board__message__option-button option-item more-button">
+                    <svg class="feather feather-more-horizontal sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <circle cx="12" cy="12" r="1"></circle>
+                      <circle cx="19" cy="12" r="1"></circle>
+                      <circle cx="5" cy="12" r="1"></circle>
+                    </svg>
+                  </button>
+                </div>
+              </div></div>`;
+            }
+            else{
+              chatresponse = await getDisease(userMessage);
+              chatresponse = "Your cat might be having <b>"+chatresponse+"</b> Please consult a Veterinarian.";
+              followupResponse = "Do you need any other help?";
+              symptoms = "no"
+              chatboard.innerHTML += `<div class="chat__conversation-board__message-container">
+                <div class="chat__conversation-board__message__person">
+                  <div class="chat__conversation-board__message__person__avatar"><img src="{{ url_for('static', filename='css/bot.png') }}" /></div><span class="chat__conversation-board__message__person__nickname">Monika Figi</span>
+                </div>
+                <div class="chat__conversation-board__message__context">
+                  <div class="chat__conversation-board__message__bubble"> <span>${chatresponse}</span></div>
+                  <div class="chat__conversation-board__message__bubble"> <span>${followupResponse}</span></div>
+                </div>
+                <div class="chat__conversation-board__message__options">
+                  <button class="btn-icon chat__conversation-board__message__option-button option-item emoji-button">
+                    <svg class="feather feather-smile sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+                      <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                      <line x1="15" y1="9" x2="15.01" y2="9"></line>
+                    </svg>
+                  </button>
+                  <button class="btn-icon chat__conversation-board__message__option-button option-item more-button">
+                    <svg class="feather feather-more-horizontal sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <circle cx="12" cy="12" r="1"></circle>
+                      <circle cx="19" cy="12" r="1"></circle>
+                      <circle cx="5" cy="12" r="1"></circle>
+                    </svg>
+                  </button>
+                </div>
+              </div></div>`;
+              
+              }
+            
+            // Clear the user input field
+            userInput.value = "";
+  
+           
+            //checks if the chatbot asked for symptoms
+            if(chatresponse =="Oh sorry to hear that! What are the symptoms?")
+            {
+              symptoms ="yes";
+            }
+        }
+  
+        // Listen for Enter key press to send a message
+        userInput.addEventListener("keyup", function(event) {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        });
+  
+        //sends a POST request to a local server with a JSON payload containing symptoms
+        async function getDisease(message)
+        {
+          const response = await fetch("http://127.0.0.1:8041/bot", {
+            method: "POST",
+            body: JSON.stringify({
+              symptoms: message.toLowerCase()
+            }),
+            headers: {
+              "Content-type": "application/json; charset=UTF-8"
+            }
+          });
+      
+          const json = await response.json();
+      
+          // Parse the JSON response and access the predicted_disease property
+          const predictedDisease = json.predicted_disease;
+      
+          // Return the predictedDisease value
+          return predictedDisease;
+        }
+        
+  
+  </script>
+
+</body>
+</html>
