@@ -1,0 +1,113 @@
+{% extends 'base_dashboard.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Disease Information</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+    }
+    h1 {
+        text-align: center;
+    }
+    #disease-info {
+        display: none;
+        margin-top: 20px;
+    }
+    #symptoms-list {
+        list-style-type: none;
+        padding: 0;
+    }
+</style>
+</head>
+<body>
+
+<h1>Disease Information</h1>
+
+
+    <button type="submit" onclick="displayDiseaseInfo()">Get Information</button>
+
+
+<div id="disease-info">
+    <h2 id="disease-name"></h2>
+    <p><strong>Description:</strong> <span id="disease-description"></span></p>
+    <p><strong>Symptoms:</strong></p>
+    <ul id="symptoms-list"></ul>
+    <p><strong>Treatment:</strong> <span id="disease-treatment"></span></p>
+</div>
+
+<script>
+    // Sample data - array of objects containing disease information
+    const diseases = [
+        {
+            name: "Common Cold",
+            description: "A viral infection of your nose and throat (upper respiratory tract).",
+            symptoms: ["Runny or stuffy nose", "Sore throat", "Cough", "Congestion", "Slight body aches or a mild headache"],
+            treatment: "Rest, fluids, and over-the-counter cold and cough medications."
+        },
+        {
+            name: "Influenza (Flu)",
+            description: "A contagious respiratory illness caused by influenza viruses.",
+            symptoms: ["Fever or feeling feverish/chills", "Cough", "Sore throat", "Runny or stuffy nose", "Muscle or body aches", "Headaches", "Fatigue"],
+            treatment: "Antiviral drugs and supportive care such as rest and fluids."
+        },
+        {
+            name: "Hypertension",
+            description: "High blood pressure, a condition in which the force of the blood against the artery walls is too high.",
+            symptoms: ["Headaches", "Shortness of breath", "Nosebleeds", "Dizziness", "Chest pain"],
+            treatment: "Lifestyle modifications and medications to control blood pressure."
+        }
+        // Add more diseases as needed
+    ];
+
+    const diseaseSelect = document.getElementById('disease-select');
+    const diseaseInfo = document.getElementById('disease-info');
+    const diseaseName = document.getElementById('disease-name');
+    const diseaseDescription = document.getElementById('disease-description');
+    const symptomsList = document.getElementById('symptoms-list');
+    const diseaseTreatment = document.getElementById('disease-treatment');
+
+    // Function to populate the dropdown menu with diseases
+    function populateDiseaseDropdown() {
+        diseases.forEach((disease, index) => {
+            const option = document.createElement('option');
+            option.value = index;
+            option.textContent = disease.name;
+            diseaseSelect.appendChild(option);
+        });
+    }
+
+    // Function to display disease information
+    function displayDiseaseInfo() {
+        const queryString = window.location.search;
+      //  const disease = diseases[index];
+        diseaseName.textContent = queryString;
+        //diseaseDescription.textContent = queryString;
+        // Clear previous symptoms
+        //symptomsList.innerHTML = '';
+        // Populate symptoms list
+        //disease.symptoms.forEach(symptom => {
+           // const listItem = document.createElement('li');
+           // listItem.textContent = symptom;
+           // symptomsList.appendChild(listItem);
+        //});
+       // diseaseTreatment.textContent = disease.treatment;
+      diseaseInfo.style.display = 'block';
+    }
+
+    // Event listener for form submission
+    //document.getElementById('disease-form').addEventListener('submit', function(event) {
+       // event.preventDefault();
+        //const selectedIndex = diseaseSelect.value;
+        //displayDiseaseInfo(selectedIndex);
+    //});
+
+    // Populate the dropdown menu when the page loads
+    //populateDiseaseDropdown();
+</script>
+
+</body>
+</html>

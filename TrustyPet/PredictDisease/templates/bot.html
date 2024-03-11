@@ -1,3 +1,4 @@
+{% extends 'base_dashboard.html' %}
 <!DOCTYPE html>
 <html lang="en" >
 <head>
@@ -96,6 +97,7 @@
       </div>`;
             var chatresponse = ""
             var followupResponse = ""
+            var diseasse = ""
   
             // Check if the user message matches any known response
             if(symptoms=="no")
@@ -128,9 +130,9 @@
               </div></div>`;
             }
             else{
-              chatresponse = await getDisease(userMessage);
-              chatresponse = "Your cat might be having <b>"+chatresponse+"</b> Please consult a Veterinarian.";
-              followupResponse = "Do you need any other help?";
+              disease = await getDisease(userMessage);
+              chatresponse = "Your cat might be having <b>"+disease+"</b> Please consult a Veterinarian.";
+              followupResponse = "For more informtion please visit <a href='/info?disease="+disease+"'>"+disease+"</a>";
               symptoms = "no"
               chatboard.innerHTML += `<div class="chat__conversation-board__message-container">
                 <div class="chat__conversation-board__message__person">

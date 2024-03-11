@@ -164,6 +164,43 @@ def bot():
     print(predicted_disease)
     return jsonify({'predicted_disease': predicted_disease[0]})
 
+@app.route('/getinfo',methods=['POST'])
+@cross_origin()
+def getinfo():
+    # Accessing URL-encoded parameters from the query string
+    param1 = request.args.get('disease')
+    
+    description_data = pd.read_csv('description.csv')
+    treatment_data = pd.read_csv('treatment.csv')
+    
+    # Fetch treatment and description for predicted disease
+    predicted_disease = predicted_disease[0]
+    predicted_treatment = treatment_data.loc[treatment_data['Disease'] == predicted_disease]['Treatment'].values[0]
+    predicted_description = description_data.loc[description_data['Disease'] == predicted_disease]['Description'].values[0]
+
+    # Construct response
+    response = {
+        'predicted_disease': predicted_disease,
+        'treatment': predicted_treatment,
+        'description': predicted_description
+    }
+
+    return jsonify(response)
+
+
+@app.route('/info')
+def example():
+    # Accessing URL-encoded parameters from the query string
+    disease = request.args.get('disease')
+    
+    return render_template("info.html", disease=disease)
+
+
+
+
+
+
+
 #checks if the Python script is being run directly
 if __name__ == '__main__':
     app.run(debug=True)
