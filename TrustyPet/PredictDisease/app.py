@@ -117,6 +117,11 @@ def logout():
     else:
         return redirect(url_for('home'))
 
+@app.route('/contact')
+@cross_origin()
+def contact_us():
+    return render_template('contactUs.html')
+
 @app.route('/bot',methods=['POST'])
 @cross_origin()
 def bot():
@@ -167,26 +172,29 @@ def bot():
 @app.route('/getinfo',methods=['POST'])
 @cross_origin()
 def getinfo():
+    from urllib.parse import unquote
+    
     # Accessing URL-encoded parameters from the query string
-    param1 = request.args.get('disease')
+    infodisease = unquote(request.json.get('disease', "").split('=', 1)[1])
+    print(infodisease)
     
     description_data = pd.read_csv('description.csv')
     treatment_data = pd.read_csv('treatment.csv')
+    symptoms_data = pd.read_csv('symptoms.csv')
+   
+    predicted_treatment=treatment_data.loc[treatment_data['Disease'].str.strip() == infodisease]['Treatment'].values[0]
+    predicted_description=description_data.loc[description_data['Disease'].str.strip() == infodisease]['Description'].values[0]
+    predicted_symptoms=symptoms_data.loc[symptoms_data['Disease'].str.strip() == infodisease]['Symptoms'].values[0]
     
-    # Fetch treatment and description for predicted disease
-    predicted_disease = predicted_disease[0]
-    predicted_treatment = treatment_data.loc[treatment_data['Disease'] == predicted_disease]['Treatment'].values[0]
-    predicted_description = description_data.loc[description_data['Disease'] == predicted_disease]['Description'].values[0]
-
     # Construct response
     response = {
-        'predicted_disease': predicted_disease,
+        'predicted_disease': infodisease,
         'treatment': predicted_treatment,
-        'description': predicted_description
+        'description': predicted_description,
+        'symptoms': predicted_symptoms
     }
 
     return jsonify(response)
-
 
 @app.route('/info')
 def example():
@@ -194,12 +202,6 @@ def example():
     disease = request.args.get('disease')
     
     return render_template("info.html", disease=disease)
-
-
-
-
-
-
 
 #checks if the Python script is being run directly
 if __name__ == '__main__':
